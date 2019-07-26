@@ -52,10 +52,6 @@ export default function getActions (action:(index:number, actionName:string)=>vo
         {
           name: 'view',
           image: imgopen
-        },
-        {
-          name: 'test',
-          image: imgopen
         }
       ], action)
     }

@@ -26,7 +26,8 @@
               <Button class="actionbutton" type="info" @click="downloadControl">下载Control类文件</Button>
               <Button class="actionbutton" type="info" @click="downloadtsapi">下载前端api脚本</Button>
               <Button class="actionbutton" type="info" @click="downloadtablecols">下载前端表格列定义脚本</Button>
-
+              <Button class="actionbutton" type="info" @click="downloadTableViewVue">下载前端表格视图</Button>
+              <Button class="actionbutton" type="info" @click="downloadModalViewVue">下载前端对话框视图</Button>
         </Card>
         </Col>
         </Row>
@@ -126,7 +127,7 @@ export default class Home extends Vue {
         method: 'post',
         data: data
       }, 'txt/plain').then((filedata) => {
-        saveFile(filedata, data.name + '.ts')
+        saveFile(filedata, this.humpToUnderline(data.name + '.ts'))
       }).catch(err => {
         this.iserror = true
         this.errMsg = '生成错误:' + err
@@ -152,7 +153,7 @@ export default class Home extends Vue {
         method: 'post',
         data: data
       }, 'txt/plain').then((filedata) => {
-        saveFile(filedata, data.name + 'TableColDefine.ts')
+        saveFile(filedata, this.humpToUnderline(data.name + 'TableColDefine.ts'))
       }).catch(err => {
         this.iserror = true
         this.errMsg = '生成错误:' + err
@@ -161,6 +162,74 @@ export default class Home extends Vue {
       this.iserror = true
       this.errMsg = '生成错误:读取文件错误'
     })
+  }
+
+  // 下载表格定义类
+  downloadTableViewVue () {
+    this.iserror = false
+    if (!this.file) {
+      this.$Message.error('请先选择实体的描述')
+      return
+    }
+
+    this.readJsonFile().then((data) => {
+      console.log('%o', data)
+      downfile({
+        url: '/api/tablelistvue',
+        method: 'post',
+        data: data
+      }, 'txt/plain').then((filedata) => {
+        saveFile(filedata, this.humpToUnderline(data.name + 'TableListView.vue'))
+      }).catch(err => {
+        this.iserror = true
+        this.errMsg = '生成错误:' + err
+      })
+    }).catch(() => {
+      this.iserror = true
+      this.errMsg = '生成错误:读取文件错误'
+    })
+  }
+
+  // 下载对话框定义类
+  downloadModalViewVue () {
+    this.iserror = false
+    if (!this.file) {
+      this.$Message.error('请先选择实体的描述')
+      return
+    }
+
+    this.readJsonFile().then((data) => {
+      console.log('%o', data)
+      downfile({
+        url: '/api/modalviewvue',
+        method: 'post',
+        data: data
+      }, 'txt/plain').then((filedata) => {
+        saveFile(filedata, this.humpToUnderline(data.name + 'Modal.vue'))
+      }).catch(err => {
+        this.iserror = true
+        this.errMsg = '生成错误:' + err
+      })
+    }).catch(() => {
+      this.iserror = true
+      this.errMsg = '生成错误:读取文件错误'
+    })
+  }
+
+  /**
+  驼峰命名转下划线
+ */
+  humpToUnderline (cpname:string):string {
+    var re:string = ''
+    for (var i = 0; i < cpname.length; i++) {
+      let ch = cpname.charAt(i)
+      let rch = ch.toLowerCase()
+      if (i !== 0 && ch !== rch) {
+        re += '-'
+      }
+      re += rch
+    }
+    return re
   }
 }
 </script>

@@ -44,6 +44,10 @@ public class DemoApplication {
 		
 		mv.addObject("name",descript.getName());
 		request.setAttribute("name",descript.getName());
+		
+		String uname=this.HumpToUnderline(descript.getName());
+		mv.addObject("uname",uname);
+		request.setAttribute("uname",uname);
 
 		mv.addObject("data", descript);
 		request.setAttribute("data", descript);
@@ -93,6 +97,10 @@ public class DemoApplication {
 		mv.addObject("name",descript.getName());
 		request.setAttribute("name",descript.getName());
 		
+		String uname=this.HumpToUnderline(descript.getName());
+		mv.addObject("uname",uname);
+		request.setAttribute("uname",uname);
+		
 		// 设置url地址
 		String apiUrl="/api/"+ StringUtils.uncapitalize(descript.getName());
 		mv.addObject("apiurl", apiUrl);
@@ -101,6 +109,41 @@ public class DemoApplication {
 		return mv;
 	}
 	
+	
+	/**
+	 * 生成表格视图
+	 * @param data
+	 * @param request
+	 * @return
+	 */
+	@PostMapping("tablelistvue")
+	public ModelAndView TableListVueTmpl(@RequestBody EntityDescript data,HttpServletRequest request) {
+		var mv = new ModelAndView("Swallow3TableListVue");
+
+		EntityDescript descript = data;
+
+		mv.addObject("data", descript);
+		request.setAttribute("data", descript);
+		
+		
+		String tabdefines=this.HumpToUnderline(descript.getName()+"TableColDefine");
+		mv.addObject("tabdefines",tabdefines);
+		request.setAttribute("tabdefines",tabdefines);
+		
+		mv.addObject("name",descript.getName());
+		request.setAttribute("name",descript.getName());
+		
+		String modalname=this.HumpToUnderline(descript.getName()+"Modal");
+		mv.addObject("modalname", modalname);
+		request.setAttribute("modalname", modalname);
+		
+		String uname=this.HumpToUnderline(descript.getName());
+		mv.addObject("uname",uname);
+		request.setAttribute("uname",uname);
+		
+		
+		return mv;
+	}
 	/**
 	 * 表格列定义导出的实现
 	 * @param data
@@ -117,9 +160,41 @@ public class DemoApplication {
 
 		mv.addObject("data", descript);
 		request.setAttribute("data", descript);
+
+		String uname=this.HumpToUnderline(descript.getName());
+		mv.addObject("uname",uname);
+		request.setAttribute("uname",uname);
+		
+		
 		
 		return mv;
 	}
+	
+	/**
+	 * 导出对话框
+	 * @param data
+	 * @param request
+	 * @return
+	 */
+	@PostMapping("modalviewvue")
+	public ModelAndView ModalViewVueTmpl(@RequestBody EntityDescript data,HttpServletRequest request) {
+		var mv = new ModelAndView("Swallow3ModalVue");
+
+		EntityDescript descript = data;		
+		
+		mv.addObject("name",descript.getName());
+		request.setAttribute("name",descript.getName());
+		
+		String uname=this.HumpToUnderline(descript.getName());
+		mv.addObject("uname",uname);
+		request.setAttribute("uname",uname);
+
+		mv.addObject("data", descript);
+		request.setAttribute("data", descript);
+		
+		return mv;
+	}
+	
 	
 	@RequestMapping("test")
 	public String Test() {
@@ -155,5 +230,56 @@ public class DemoApplication {
 		String rawPackage = String.join(".", arrayList);
 		return rawPackage;
 	}
+
+
+	/***
+ * 下划线命名转为驼峰命名
+ * 
+ * @param para
+ *        下划线命名的字符串
+ */
+ 
+public static String UnderlineToHump(String para){
+	StringBuilder result=new StringBuilder();
+	String a[]=para.split("_");
+	for(String s:a){
+		if (!para.contains("_")) {
+			result.append(s);
+			continue;
+		}
+		if(result.length()==0){
+			result.append(s.toLowerCase());
+		}else{
+			result.append(s.substring(0, 1).toUpperCase());
+			result.append(s.substring(1).toLowerCase());
+		}
+	}
+	return result.toString();
+}
+
+
+
+/***
+* 驼峰命名转为下划线命名
+* 
+* @param para
+*        驼峰命名的字符串
+*/
+
+public static String HumpToUnderline(String para){
+	StringBuilder sb=new StringBuilder();
+	
+	for(int i=0;i<para.length();i++) {
+		char ch=para.charAt(i);
+		char rech=(ch+"").toLowerCase().charAt(0);
+		if(i!=0&&ch!=rech) {
+			sb.append('-');
+		}
+		sb.append(rech);
+	}
+	
+	return sb.toString();
+}
+
 
 }
