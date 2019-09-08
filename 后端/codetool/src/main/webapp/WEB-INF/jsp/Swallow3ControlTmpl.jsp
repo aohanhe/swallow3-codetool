@@ -79,7 +79,7 @@ public class ${name}Control {
       return ApiResult.success(service.insertItem(item));
     } catch (SwallowException e) {
       log.error("新增${cnname}出错:" + e.getMessage(), e);
-      return ApiResult.fail("新增${cnname}出错:" + e.getMessage());
+      return ApiResult.fail(e,"新增${cnname}出错:" + e.getMessage());
     }
   }
 
@@ -93,8 +93,8 @@ public class ${name}Control {
     try {
       return ApiResult.success(service.updateItem(item));
     } catch (SwallowException e) {
-      log.error("新增${cnname}出错:" + e.getMessage(), e);
-      return ApiResult.fail("新增${cnname}出错:" + e.getMessage());
+      log.error("修改${cnname}出错:" + e.getMessage(), e);
+      return ApiResult.fail(e,"修改${cnname}出错:" + e.getMessage());
     }
   }
 
@@ -112,7 +112,7 @@ public class ${name}Control {
       return ApiResult.success(res);
     } catch (SwallowException e) {
       log.error("查询${cnname}数据出错:" + e.getMessage(), e);
-      return ApiResult.fail("查询${cnname}数据出错:" + e.getMessage());
+      return ApiResult.fail(e,"查询${cnname}数据出错:" + e.getMessage());
     }
   }
 
@@ -129,7 +129,7 @@ public class ${name}Control {
       return ApiResult.success(res);
     } catch (Exception e) {
       log.error("查询${cnname}出错:" + e.getMessage(), e);
-      return ApiResult.fail("查询${cnname}出错:" + e.getMessage());
+      return ApiResult.fail(e,"查询${cnname}出错:" + e.getMessage());
     }
   }
 
@@ -146,7 +146,7 @@ public class ${name}Control {
       return BaseApiResult.successResult();
     } catch (Exception e) {
       log.error("删除${cnname}出错:" + e.getMessage(), e);
-      return BaseApiResult.failResult(500, "删除${cnname}出错:" + e.getMessage());
+      return BaseApiResult.failResult(e, "删除${cnname}出错:" + e.getMessage());
     }
   }
 
